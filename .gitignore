@@ -1,0 +1,26 @@
+# ignore all bundle changes
+.bundle
+
+# ignore any db changes
+db/*.sqlite3
+
+# ignore all files in the log dir that end in log
+log/*.log
+
+# ignore all files in the tmp dir
+tmp/
+
+# ignore all files in the doc dir
+doc/
+
+# ignore all swap files - swap files are temporary files used in large memory ops
+*.swp
+
+# ignore all files with ~ (traditional emacs backup)
+*~
+
+# ???
+.project
+
+# ignore time machine data
+.DS_Store
