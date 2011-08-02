@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.9'
 
-# gem 'sqlite3'
+# gem 'sqlite3' # no specified version means use the latest one
 gem 'sqlite3', '1.3.3'
 
 # Bundle gems for the local environment. Make sure to
