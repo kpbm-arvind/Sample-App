@@ -22,4 +22,32 @@ describe "LayoutLinks" do
     response.should have_selector('title', :content => 'Help')
   end
   
+  it "should have a Sign-up page at '/signup'" do
+    get '/signup'
+    response.should have_selector('title', :content => 'Sign up')
+  end
+  
+  it "should have the right links on the layout" do
+    visit root_path
+    response.should have_selector('title', :content => 'Home')
+    
+    click_link 'About'
+    response.should have_selector('title', :content => 'About')
+    
+    click_link 'Contact'
+    response.should have_selector('title', :content => 'Contact')
+    
+    click_link 'Home'
+    response.should have_selector('title', :content => 'Home')
+    
+    click_link 'Sign up now!'
+    response.should have_selector('title', :content => 'Sign up')
+    
+    # This is a somewhat advanced test to see if the logo links to '/'
+    # It is derived by looking at the page source and noting that the logo is 
+    # an image with a 'href' tag around it. This line checks that we have an
+    # href pointing to '/' followed by an image (this is accomplished by the '>')    
+    response.should have_selector('a[href="/"]>img')                   
+  end
+  
 end
