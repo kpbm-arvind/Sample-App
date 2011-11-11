@@ -5,7 +5,12 @@ describe User do
   before(:each) do
     @default_user   = 'Example User'
     @default_email  = 'user@example.com'
-    @attr_hash = {:name => @default_user, :email => @default_email}
+    @default_password = 'password'
+    @default_password_confirmation = 'password'
+    @attr_hash = {:name => @default_user, 
+                  :email => @default_email,
+                  :password => @default_password,
+                  :password_confirmation => @default_password_confirmation}
   end
   
 #  pending "add some examples to (or delete) #{__FILE__}"
@@ -72,16 +77,65 @@ describe User do
     duplicate_email_user.should_not be_valid
   end
   
+  describe "passwords" do
+    before(:each) do
+      @user = User.new(@attr_hash)
+    end
+    
+    it "should have a password attribute" do
+      @user.should respond_to(:password)
+    end
+    
+    it "should have a password confirmation attribute" do
+      @user.should respond_to(:password_confirmation)
+    end
+  end
+  
+  describe "password validations" do
+    it "should require a password" do
+      User.new(@attr_hash.merge(:password => "", :password_confirmation => "")).should_not be_valid
+    end
+    
+    it "should require a matching password confirmation" do
+      User.new(@attr_hash.merge(:password_confirmation => "invalid")).should_not be_valid
+    end
+    
+    it "should reject short passwords" do
+      short = "a"*5 #our passwords need to be 6-40chars long
+      hash = @attr_hash.merge(:password => short, :password_confirmation => short)
+      User.new(hash).should_not be_valid
+    end
+    
+    it "should reject long passwords" do
+      long = "a"*41 #our passwords need to be 6-40chars long
+      hash = @attr_hash.merge(:password => long, :password_confirmation => long)
+      User.new(hash).should_not be_valid
+    end
+  end
+  
+  describe "password encryption" do
+    before(:each) do
+      @user = User.create!(@attr_hash)
+    end
+    
+    it "should have an encrypted password attribute" do
+      @user.should respond_to(:encrypted_password)
+    end
+    
+  end
+  
 end
+
 
 # == Schema Information
 #
 # Table name: users
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id                 :integer         not null, primary key
+#  name               :string(255)
+#  email              :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  encrypted_password :string(255)
 #
 
