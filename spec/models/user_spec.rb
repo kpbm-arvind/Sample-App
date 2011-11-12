@@ -122,9 +122,51 @@ describe User do
       @user.should respond_to(:encrypted_password)
     end
     
+    it "should set the encrypted password attribute" do
+      @user.encrypted_password.should_not be_blank
+    end
+    
+    it "should have a salt" do
+      @user.should respond_to(:salt)
+    end
+    
+    describe "has_password? method" do
+      it "should exist" do
+        @user.should respond_to(:has_password?)
+      end
+      
+      it "should return true if passwords match" do
+        @user.has_password?(@attr_hash[:password]).should be_true
+      end
+      
+      it "should return false otherwise" do
+        @user.has_password?("invalid").should be_false        
+      end
+      
+    end
+    
+    describe "authenticate method" do
+      it "should exist" do
+        #class method
+        User.should respond_to(:authenticate)
+      end
+
+      it "should return nil on email/password mismatch" do
+        User.authenticate(@attr_hash[:email], "wrongpass").should be_nil
+      end
+
+      it "should return nil on email with no user" do
+        User.authenticate("bar@foo.com", @attr_hash[:password]).should be_nil
+      end
+
+      it "should return the actual user on a match" do
+        User.authenticate(@attr_hash[:email], @attr_hash[:password]).should == @user
+      end
+    end
   end
   
 end
+
 
 
 # == Schema Information
@@ -137,5 +179,6 @@ end
 #  created_at         :datetime
 #  updated_at         :datetime
 #  encrypted_password :string(255)
+#  salt               :string(255)
 #
 
