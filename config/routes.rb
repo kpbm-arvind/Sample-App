@@ -1,5 +1,5 @@
 SampleApp::Application.routes.draw do
-  resources :users
+  resources :users # creates both show and new
 
   root :to => "pages#home"
   match '/signup', :to => 'users#new'
